@@ -15,6 +15,7 @@ import okhttp3.Headers;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivty";
+    public static final String API_KEY = BuildConfig.API_KEY;
     AsyncHttpClient client = new AsyncHttpClient();
     School school;
 
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         school = new School();
-        client.get("https://api.data.gov/ed/collegescorecard/v1/schools?api_key=iNNtI4ggOR8nre5DerYF57hjAsVmSu1cmdYVXoMn", new JsonHttpResponseHandler() {
+        client.get("https://api.data.gov/ed/collegescorecard/v1/schools?api_key="+ API_KEY, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "OnSuccess");
