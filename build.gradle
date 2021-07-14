@@ -14,6 +14,7 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url "https://jitpack.io" }
         google()
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
@@ -22,4 +23,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+ext {
+    appCompatVersion = '1.0.0'
+    designSupportVersion = '1.0.0'
 }
