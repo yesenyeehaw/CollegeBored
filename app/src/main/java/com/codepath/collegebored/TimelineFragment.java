@@ -1,5 +1,8 @@
 package com.codepath.collegebored;
-
+/*
+ * This class handles all of a user's liked schools and will display them all in
+ * a recycler view on the fragment
+ */
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,7 @@ public class TimelineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_timeline, container, false);
     }
 

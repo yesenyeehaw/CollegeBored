@@ -9,7 +9,7 @@
         android:id="@+id/tvSchoolName"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:text="TextView"
+        android:text="SchoolName"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp" />
 </RelativeLayout>

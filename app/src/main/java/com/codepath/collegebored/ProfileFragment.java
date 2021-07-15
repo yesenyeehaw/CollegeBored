@@ -1,5 +1,7 @@
 package com.codepath.collegebored;
-
+/*
+ * This class handles all of a user's attributes and displays it on a fragment
+ */
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -23,6 +25,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
     @Override

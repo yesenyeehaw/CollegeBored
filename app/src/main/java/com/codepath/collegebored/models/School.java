@@ -1,5 +1,7 @@
 package com.codepath.collegebored.models;
-
+/*
+* This class handles all of a school's attributes from Parse
+ */
 import android.util.Log;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
