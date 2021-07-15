@@ -5,8 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
+    <TextView
+        android:id="@+id/tvStartupS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="332dp"
+        android:hint="Search for schools here!"
+        android:textAlignment="center" />
+
     <ListView
         android:id="@+id/lvSchools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+    </ListView>
 </RelativeLayout>

@@ -14,8 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import com.codepath.asynchttpclient.AsyncHttpClient;
@@ -31,13 +34,14 @@ import okhttp3.Headers;
 
 
 public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener{
-    public static final String URL = "https://api.data.gov/ed/collegescorecard/v1/schools?api_key=";
+    public static final String URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?";
     public static final String TAG = "SearchFragment";
-    public static final String API_KEY = BuildConfig.API_KEY;
+    public static final String API_KEY = "&api_key=" + BuildConfig.API_KEY;
     AsyncHttpClient client = new AsyncHttpClient();
 
     ArrayList<String> schoolsList = new ArrayList<>();
     ListView lvSchools;
+    TextView tvStartupS;
 
     public SearchFragment() {}
 
@@ -52,6 +56,13 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
         lvSchools = view.findViewById(R.id.lvSchools);
+        tvStartupS = view.findViewById(R.id.tvStartupS);
+        lvSchools.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(), "You've selected " + lvSchools.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -65,8 +76,11 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        tvStartupS.setHint("");
         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, searchAction(query));
+        arrayAdapter.notifyDataSetChanged();
         lvSchools.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
         return false;
     }
 
@@ -79,11 +93,10 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     //Search for schools and returns the list (MAX 50 SCHOOLS)
     public ArrayList<String> searchAction (String query){
-        final String searchSchool_URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.name="+ query + "&fields=school.name&per_page=50&api_key=";
+        final String searchSchool_URL = URL + "school.name="+ query + "&fields=school.name&per_page=50";
         client.get(searchSchool_URL + API_KEY, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, json.toString());
                 try{
                     JSONArray results = json.jsonObject.getJSONArray("results");
                     for (int i = 0; i < results.length(); i ++){
