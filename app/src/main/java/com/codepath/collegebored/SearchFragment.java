@@ -2,11 +2,16 @@ package com.codepath.collegebored;
 /*
  * This class handles the SearchFragment and the search bar
  */
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,8 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.FragmentManager;
+
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.codepath.collegebored.models.School;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,10 +46,10 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public static final String TAG = "SearchFragment";
     public static final String API_KEY = "&api_key=" + BuildConfig.API_KEY;
     AsyncHttpClient client = new AsyncHttpClient();
-
     ArrayList<String> schoolsList = new ArrayList<>();
     ListView lvSchools;
     TextView tvStartupS;
+    School school = new School();
 
     public SearchFragment() {}
 
@@ -55,12 +63,21 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
+
         lvSchools = view.findViewById(R.id.lvSchools);
         tvStartupS = view.findViewById(R.id.tvStartupS);
         lvSchools.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "You've selected " + lvSchools.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                String pos = lvSchools.getItemAtPosition(position).toString();
+                Toast.makeText(getContext(), "You've selected " + pos, Toast.LENGTH_SHORT).show();
+                school.setINSTITUTION_NAME(pos);
+                Bundle bundle = new Bundle();
+                bundle.putString("key", school.INSTITUTION_NAME );
+                Fragment fragment = new SchoolDetailsFragment();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
             }
         });
     }
@@ -93,7 +110,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     //Search for schools and returns the list (MAX 50 SCHOOLS)
     public ArrayList<String> searchAction (String query){
-        final String searchSchool_URL = URL + "school.name="+ query + "&fields=school.name&per_page=50";
+        final String searchSchool_URL = URL + "school.name="+ query + "&sort=school.name&fields=school.name&per_page=50";
         client.get(searchSchool_URL + API_KEY, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -102,7 +119,6 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                     for (int i = 0; i < results.length(); i ++){
                         JSONObject JSON_SCHOOL_OBJECT = results.getJSONObject(i);
                         String FINAL_SCHOOL_NAME = JSON_SCHOOL_OBJECT.getString("school.name");
-                        //Log.d(TAG, FINAL_SCHOOL_NAME);
                         schoolsList.add(FINAL_SCHOOL_NAME);
                     }
                 } catch(JSONException e){
