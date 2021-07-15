@@ -14,9 +14,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import androidx.appcompat.widget.SearchView;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import okhttp3.Headers;
 
@@ -26,6 +35,9 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public static final String TAG = "SearchFragment";
     public static final String API_KEY = BuildConfig.API_KEY;
     AsyncHttpClient client = new AsyncHttpClient();
+
+    ArrayList<String> schoolsList = new ArrayList<>();
+    ListView lvSchools;
 
     public SearchFragment() {}
 
@@ -39,7 +51,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-
+        lvSchools = view.findViewById(R.id.lvSchools);
     }
 
     @Override
@@ -53,31 +65,42 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.d(TAG, query);
-        searchAction(query);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, searchAction(query));
+        lvSchools.setAdapter(arrayAdapter);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        //ArrayList needs to be cleared before new query begins
+        schoolsList.clear();
         return false;
     }
 
-    public String searchAction (String query){
-        final String testURL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.name="+ query + "&fields=school.name&per_page=50&api_key=";
-        final String[] searchSchool = new String[1];
-        client.get(testURL + API_KEY, new JsonHttpResponseHandler() {
+    //Search for schools and returns the list (MAX 50 SCHOOLS)
+    public ArrayList<String> searchAction (String query){
+        final String searchSchool_URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.name="+ query + "&fields=school.name&per_page=50&api_key=";
+        client.get(searchSchool_URL + API_KEY, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, json.toString());
-                searchSchool[0] = json.toString();
-                Log.d(TAG, searchSchool[0]);
+                try{
+                    JSONArray results = json.jsonObject.getJSONArray("results");
+                    for (int i = 0; i < results.length(); i ++){
+                        JSONObject JSON_SCHOOL_OBJECT = results.getJSONObject(i);
+                        String FINAL_SCHOOL_NAME = JSON_SCHOOL_OBJECT.getString("school.name");
+                        //Log.d(TAG, FINAL_SCHOOL_NAME);
+                        schoolsList.add(FINAL_SCHOOL_NAME);
+                    }
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
             }
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "OnFailure");
             }
         });
-        return searchSchool[0];
+        return schoolsList;
     }
 }
