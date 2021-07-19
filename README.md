@@ -1,5 +1,3 @@
-# FBU-Project
-
 App Design - Product Spec
 
 
@@ -19,12 +17,32 @@ App Design - Product Spec
 
 ### **General Description:**
 
-- User can create an account and input data about themselves (GPA, SAT scores, major, location, stay in or out of state) to see the likelihood of getting in
+- User can create an account and input data about themselves (GPA, SAT scores, major, location, stay in or out of state)
 - Users can add schools to their profiles and keep track of schools they've already applied to 
 
    - **Category:** Education
-   - **Mobile:** Mobile is necessary for students to easilly input datat and log in and out of their account.  
-   - **Story:** Creates a bridge between higher education and students. 
+   - **Mobile:** Mobile is necessary for students to easilly input data and log in and out of their account.  
+   - **Story:** Creates a bridge between higher education and students who get overwhelmed with university spam emails 
    - **Market:** Any and all highschool students applying to college. 
    - **Habit:** First generation students can get discouraged and not apply to schools because of the lack of help and information they recieve in highschool. This app. would hopefully help students with the application process and even infrom users of what rescources are available for them! 
    - **Scope:** Very first verison would allow for users to only do the follwoing in the description and later on students will be able to interact and help eachohter out while applying to schools! 
+
+
+
+
+Required Stories
+
+- [ ] User profile that has their information pertaining highschool, city/county (optional), GPA, ACT/SAT scores, extracurriculars 
+- [ ] Search for schools bar, where users can look for and "like" schools to add to their list of schools they want to or plan to apply to 
+- [ ] User home screen displays schools user has "liked" and user can say if theyve applied to it or not yet
+- [ ] User will see schools on google map when browsing 
+- [ ] User will see deadlines for applications/financial aid 
+- [ ] User can log in or sign up 
+
+
+Optional Stories 
+- [ ] User can get matched with other universities based on stats on a "compare" activity 
+- [ ] Q&A board where people can ask questions and other users can reply to give input 
+- [ ] User private or public feature 
+- [ ] back to top button 
+- [ ] User can edit their profile from profile page
