@@ -15,21 +15,17 @@ import org.json.JSONObject;
 @ParseClassName("School")
 public class School extends ParseObject {
     public static final String TAG = "School";
-    public String SAT_Scores;
-    public String INSTITUTION_NAME;
-    public String HighSchoolName;
+    public String SAT_Score;
+    public String KEY_INSTITUTION_NAME = "INSTITUTION_NAME";
 
     public School() {
     }
 
     public String getINSTITUTION_NAME(){
-        return getString("INSTITUTION_NAME");
+        return getString(KEY_INSTITUTION_NAME);
     }
 
     public void setINSTITUTION_NAME(String name) {
-        put(INSTITUTION_NAME, name);
+        put(KEY_INSTITUTION_NAME, name);
     }
-
-
-
 }

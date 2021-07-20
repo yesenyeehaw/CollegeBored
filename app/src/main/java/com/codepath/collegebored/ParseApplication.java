@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -14,6 +15,8 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         ParseObject.registerSubclass(School.class);
+        ParseObject.registerSubclass(Favorite.class);
+
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("AYkgveoMTsykzttb2OgJRRV4zM7Y5GK5gwVuaUbn")
                 .clientKey("7UrI5cMOVL4m7SbsnHZwVrUCq20mohju4jd50Rbp")

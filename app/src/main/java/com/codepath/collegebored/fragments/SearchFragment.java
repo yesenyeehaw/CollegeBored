@@ -61,7 +61,6 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-
         lvSchools = view.findViewById(R.id.lvSchools);
         tvStartupS = view.findViewById(R.id.tvStartupS);
         lvSchools.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,7 +71,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 school.setINSTITUTION_NAME(pos);
                 //Takes us to SchoolDetails fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("key", school.INSTITUTION_NAME );
+                bundle.putString("key", school.getINSTITUTION_NAME());
                 Fragment fragment = new SchoolDetailsFragment();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getFragmentManager();
@@ -120,6 +119,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                         JSONObject JSON_SCHOOL_OBJECT = results.getJSONObject(i);
                         String FINAL_SCHOOL_NAME = JSON_SCHOOL_OBJECT.getString("school.name");
                         schoolsList.add(FINAL_SCHOOL_NAME);
+                        arrayAdapter.notifyDataSetChanged();
                     }
                 } catch(JSONException e){
                     e.printStackTrace();

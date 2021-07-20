@@ -1,5 +1,5 @@
 /* this adapter will link all the liked schools information on user
-* timeline
+*  timeline
  */
 
 package com.codepath.collegebored;
@@ -62,7 +62,7 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.ViewHolder
         }
 
         public void bind(School school) {
-            tvSchoolName.setText(school.INSTITUTION_NAME);
+          // tvSchoolName.setText(school.INSTITUTION_NAME);
         }
     }
 }

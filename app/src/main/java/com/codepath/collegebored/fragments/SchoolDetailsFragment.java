@@ -22,9 +22,12 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.collegebored.BuildConfig;
 import com.codepath.collegebored.R;
+import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -32,7 +35,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,7 +46,9 @@ public class SchoolDetailsFragment extends Fragment {
     TextView tvSchoolNameDetails;
     TextView tvSATscore;
     School currentSchool;
+    ParseUser currentUser;
     ImageButton btnFavorite;
+    Favorite favorite;
 
     //TODO: find a way to make these variables easilly accessible (from the same place)
     public static final String URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?";
@@ -64,6 +68,7 @@ public class SchoolDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currentSchool = new School();
+        currentUser = ParseUser.getCurrentUser();
         super.onViewCreated(view, savedInstanceState);
         tvSchoolNameDetails = view.findViewById(R.id.tvSchoolNameDetails);
         Bundle bundle = this.getArguments();
@@ -75,15 +80,33 @@ public class SchoolDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 btnFavorite.setImageResource(R.drawable.ufi_heart_active);
+                currentSchool.setINSTITUTION_NAME(DATA_FROM_SEARCH_FRAGMENT);
+                favoriteSchool(currentUser, currentSchool);
             }
         });
         SAT_SCORE(DATA_FROM_SEARCH_FRAGMENT);
         getImage(DATA_FROM_SEARCH_FRAGMENT);
     }
 
-
+    // TODO This will return an image of the school
     public String getImage(String INSTITUTION_NAME) {
         return "";
+    }
+
+    private void favoriteSchool(ParseUser user, School school) {
+        favorite = new Favorite();
+        favorite.setSchool(school);
+        favorite.setUser(user);
+        favorite.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if ( e != null){
+                    Log.e(TAG, e.getMessage());
+                    Toast.makeText(getContext(), "Error while saving.", Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(getContext(), "School was successful!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void SAT_SCORE(String INSTITUTION_NAME) {
