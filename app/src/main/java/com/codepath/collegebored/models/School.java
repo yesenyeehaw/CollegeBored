@@ -17,6 +17,7 @@ public class School extends ParseObject {
     public static final String TAG = "School";
     public String SAT_Scores;
     public String INSTITUTION_NAME;
+    public String HighSchoolName;
 
     public School() {
     }
@@ -25,7 +26,10 @@ public class School extends ParseObject {
         return getString("INSTITUTION_NAME");
     }
 
-    public void setINSTITUTION_NAME(String INSTITUTION_NAME) {
-        this.INSTITUTION_NAME = INSTITUTION_NAME;
+    public void setINSTITUTION_NAME(String name) {
+        put(INSTITUTION_NAME, name);
     }
+
+
+
 }

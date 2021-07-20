@@ -1,3 +1,7 @@
+/* this adapter will link all the liked schools information on user
+* timeline
+ */
+
 package com.codepath.collegebored;
 
 import android.content.Context;

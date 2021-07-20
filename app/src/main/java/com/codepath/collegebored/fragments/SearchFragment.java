@@ -1,17 +1,12 @@
-package com.codepath.collegebored;
+package com.codepath.collegebored.fragments;
 /*
  * This class handles the SearchFragment and the search bar
  */
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +25,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.codepath.collegebored.BuildConfig;
+import com.codepath.collegebored.R;
 import com.codepath.collegebored.models.School;
 
 import org.json.JSONArray;
@@ -50,6 +47,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     ListView lvSchools;
     TextView tvStartupS;
     School school = new School();
+    ArrayAdapter arrayAdapter;
 
     public SearchFragment() {}
 
@@ -72,6 +70,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 String pos = lvSchools.getItemAtPosition(position).toString();
                 Toast.makeText(getContext(), "You've selected " + pos, Toast.LENGTH_SHORT).show();
                 school.setINSTITUTION_NAME(pos);
+                //Takes us to SchoolDetails fragment
                 Bundle bundle = new Bundle();
                 bundle.putString("key", school.INSTITUTION_NAME );
                 Fragment fragment = new SchoolDetailsFragment();
@@ -94,10 +93,11 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     @Override
     public boolean onQueryTextSubmit(String query) {
         tvStartupS.setHint("");
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, searchAction(query));
+        arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, searchAction(query));
         arrayAdapter.notifyDataSetChanged();
         lvSchools.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
+
         return false;
     }
 
@@ -110,7 +110,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     //Search for schools and returns the list (MAX 50 SCHOOLS)
     public ArrayList<String> searchAction (String query){
-        final String searchSchool_URL = URL + "school.name="+ query + "&sort=school.name&fields=school.name&per_page=50";
+        final String searchSchool_URL = URL + "school.name="+ query + "&fields=school.name&per_page=25";
         client.get(searchSchool_URL + API_KEY, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {

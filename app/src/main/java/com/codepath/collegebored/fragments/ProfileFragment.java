@@ -1,4 +1,4 @@
-package com.codepath.collegebored;
+package com.codepath.collegebored.fragments;
 /*
  * This class handles all of a user's attributes and displays it on a fragment
  */
@@ -12,12 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.codepath.collegebored.R;
+import com.codepath.collegebored.activities.LoginActivity;
 import com.parse.ParseUser;
 
 
 public class ProfileFragment extends Fragment {
     Button btnLogOut;
+    TextView tvHighSchool;
 
     public ProfileFragment() {}
 
@@ -31,15 +35,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ParseUser currentUser = ParseUser.getCurrentUser();
         btnLogOut = view.findViewById(R.id.btnLogOut);
+        tvHighSchool = view.findViewById(R.id.tvHighSchool);
+        tvHighSchool.setText((CharSequence) currentUser.get("HIGH_SCHOOL"));
+
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseUser.logOut();
-                ParseUser currentUser = ParseUser.getCurrentUser();
                 goLoginActivity();
             }
         });
+
     }
     private void goLoginActivity(){
         Intent i = new Intent(getContext(), LoginActivity.class);

@@ -1,28 +1,19 @@
-package com.codepath.collegebored;
+package com.codepath.collegebored.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import androidx.appcompat.widget.SearchView;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.codepath.collegebored.fragments.ProfileFragment;
+import com.codepath.collegebored.R;
+import com.codepath.collegebored.fragments.SearchFragment;
+import com.codepath.collegebored.fragments.TimelineFragment;
 import com.codepath.collegebored.models.School;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import okhttp3.Headers;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;

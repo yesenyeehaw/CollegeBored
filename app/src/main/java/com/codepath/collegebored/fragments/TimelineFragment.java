@@ -1,4 +1,4 @@
-package com.codepath.collegebored;
+package com.codepath.collegebored.fragments;
 /*
  * This class handles all of a user's liked schools and will display them all in
  * a recycler view on the fragment
@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.codepath.collegebored.R;
 
 import org.jetbrains.annotations.NotNull;
 

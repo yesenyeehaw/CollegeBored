@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".fragments.ProfileFragment">
 
     <ImageView
         android:id="@+id/ivProfilePicture"
@@ -32,46 +32,22 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tvHighSchool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvGPA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tvSAT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
 
         <Button
             android:id="@+id/btnLogOut"
