@@ -51,19 +51,22 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSchoolName = itemView.findViewById(R.id.tvSchoolName);
-
-//TODO: Implement adapter listener to bring up school details
-/*            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int pos = getAdapterPosition();
-/               }});
-        }*/
         }
+
 
         public void bind(School school) {
-          // tvSchoolName.setText(school.INSTITUTION_NAME);
+           tvSchoolName.setText(school.getINSTITUTION_NAME());
         }
+    }
+
+    public void clear() {
+        schools.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<School> list){
+        schools.addAll(list);
+        notifyDataSetChanged();
     }
 }
 

@@ -15,8 +15,9 @@ import org.json.JSONObject;
 @ParseClassName("School")
 public class School extends ParseObject {
     public static final String TAG = "School";
-    public String SAT_Score;
-    public String KEY_INSTITUTION_NAME = "INSTITUTION_NAME";
+    public static final String SAT_Score = "SAT_SCORE";
+    public static final String KEY_INSTITUTION_NAME = "INSTITUTION_NAME";
+    public static final String KEY_FAV_STATUS = "FavStatus";
 
     public School() {
     }
@@ -28,4 +29,8 @@ public class School extends ParseObject {
     public void setINSTITUTION_NAME(String name) {
         put(KEY_INSTITUTION_NAME, name);
     }
+
+    public Boolean getFavStatus(){ return getBoolean(KEY_FAV_STATUS); }
+
+    public void setFavStatus(boolean status) { put(KEY_FAV_STATUS, status); }
 }
