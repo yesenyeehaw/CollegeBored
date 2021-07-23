@@ -80,7 +80,6 @@ public class SchoolDetailsFragment extends Fragment {
         tvSchoolNameDetails = view.findViewById(R.id.tvSchoolNameDetails);
         Bundle bundle = this.getArguments();
         String DATA_FROM_SEARCH_FRAGMENT = bundle.getString("key");
-
         tvSchoolNameDetails.setText(DATA_FROM_SEARCH_FRAGMENT);
         tvSATscore = view.findViewById(R.id.tvSATscore);
         btnFavorite = view.findViewById(R.id.btnFavorite);
@@ -100,22 +99,20 @@ public class SchoolDetailsFragment extends Fragment {
                 }
                 // if the school already exists then get the school by finding it by name and then
                 // set the currentschool to what we get back
+
                 if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)){
-                    Log.d(TAG, "Found school");
-                    // CALL FAVORITE SCHOOL
-                    favoriteSchool(currentUser, currentSchool);
+                    Log.d(TAG, "School already exists!");
+                    //favoriteSchool(currentUser, currentSchool);
                 }else {
                     Log.d(TAG, "School doesnt exist");
-                    School newSchool = new School();
-                        // new.setInstituo...
-                        //
 
                     // CREATE FAVORITE AND PASS THE newSCHOOL YOU CREATE TO THE FAVORITE SCHOOL METHOD
-                }
+                    currentSchool.setINSTITUTION_NAME(DATA_FROM_SEARCH_FRAGMENT);
 
-                currentSchool.setINSTITUTION_NAME(DATA_FROM_SEARCH_FRAGMENT);
-                favoriteSchool(currentUser, currentSchool);
-                status(currentSchool, currentUser);
+                    favoriteSchool(currentUser, newSchool(currentSchool));
+                }
+                // favoriteSchool(currentUser, currentSchool);
+                //status(currentSchool, currentUser);
             }
         });
         SAT_SCORE(DATA_FROM_SEARCH_FRAGMENT);
@@ -140,40 +137,6 @@ public class SchoolDetailsFragment extends Fragment {
         return false;
     }
 
-    //this function will help display all the favorites (school, user)
-    public void status(School school, ParseUser user){
-        ParseQuery<School> query = ParseQuery.getQuery("FavStatus");
-        query.include(school.KEY_INSTITUTION_NAME);
-        query.findInBackground(new FindCallback<School>() {
-            @Override
-            public void done(List<School> object, ParseException e) {
-                if (e != null ){
-                    Log.e(TAG, e.getMessage());
-                } else {
-                    Log.d(TAG, school.getINSTITUTION_NAME());
-                    Log.d(TAG, user.getObjectId().toString());
-                    //this is how to get the user name and school liked!!!
-                    Log.d(TAG, favorite.getUser().getUsername());
-                    Log.d(TAG, favorite.getSchool().get("INSTITUTION_NAME").toString());
-                }
-            }
-        });
-        ParseQuery<Favorite> queryName = ParseQuery.getQuery(Favorite.class);
-        queryName.findInBackground(new FindCallback<Favorite>() {
-
-            @Override
-            public void done(List<Favorite> objects, ParseException e) {
-                if( e != null){
-                    Log.e(TAG,  e.getMessage());
-                } else{
-                    if (favorite.getUser().getObjectId() == currentUser.getObjectId() && favorite.getSchool().getObjectId() == currentSchool.getObjectId()){
-                        Log.d(TAG, favorite.getUser().getObjectId().toString() + school.getINSTITUTION_NAME());
-                    }
-                }
-            }
-        });
-
-    }
     // TODO This will return an image of the school
     public String getImage(String INSTITUTION_NAME) {
         return "";
@@ -192,6 +155,19 @@ public class SchoolDetailsFragment extends Fragment {
             DrawableCompat.setTint(wrapped, Color.BLACK);
             btnFavorite.setImageDrawable(wrapped);
         }
+    }
+    private School newSchool(School school){
+        school.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if ( e != null){
+                    Log.e(TAG, e.getMessage());
+                }
+                school.setINSTITUTION_NAME(school.getINSTITUTION_NAME());
+                Toast.makeText(getContext(), "New School added!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return school;
     }
     private void favoriteSchool(ParseUser user, School school) {
         favorite = new Favorite();

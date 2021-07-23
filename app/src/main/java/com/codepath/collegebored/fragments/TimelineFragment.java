@@ -57,6 +57,9 @@ public class TimelineFragment extends Fragment {
         allFavorites = new ArrayList<>();
         adapter = new SchoolAdapter(getContext(), allFavorites);
         rvSchools.setAdapter(adapter);
+        if (allFavorites.size() > 0){
+            tvStartUp.setHint("");
+        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvSchools.setLayoutManager(linearLayoutManager);
         //queryPosts();
@@ -82,7 +85,7 @@ public class TimelineFragment extends Fragment {
                    }
                    allFavorites.addAll(favSchools);
                    adapter.notifyDataSetChanged();
-                   Log.d(TAG, "FavSchools: " + favSchools.size());
+                    Log.d(TAG, "FavSchools: " + favSchools.size());
                 }
             }
         });
