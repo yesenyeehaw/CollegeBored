@@ -80,6 +80,7 @@ public class SchoolDetailsFragment extends Fragment {
         tvSchoolNameDetails = view.findViewById(R.id.tvSchoolNameDetails);
         Bundle bundle = this.getArguments();
         String DATA_FROM_SEARCH_FRAGMENT = bundle.getString("key");
+
         tvSchoolNameDetails.setText(DATA_FROM_SEARCH_FRAGMENT);
         tvSATscore = view.findViewById(R.id.tvSATscore);
         btnFavorite = view.findViewById(R.id.btnFavorite);
@@ -92,34 +93,87 @@ public class SchoolDetailsFragment extends Fragment {
                     ParseApplication.changeFavStatus(currentSchool, false);
                 }
                 else{
+                    //
                     currentSchool.setFavStatus(true);
                     changebtnFav(true);
                     ParseApplication.changeFavStatus(currentSchool, true);
                 }
+                // if the school already exists then get the school by finding it by name and then
+                // set the currentschool to what we get back
+                if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)){
+                    Log.d(TAG, "Found school");
+                    // CALL FAVORITE SCHOOL
+                    favoriteSchool(currentUser, currentSchool);
+                }else {
+                    Log.d(TAG, "School doesnt exist");
+                    School newSchool = new School();
+                        // new.setInstituo...
+                        //
+
+                    // CREATE FAVORITE AND PASS THE newSCHOOL YOU CREATE TO THE FAVORITE SCHOOL METHOD
+                }
+
                 currentSchool.setINSTITUTION_NAME(DATA_FROM_SEARCH_FRAGMENT);
                 favoriteSchool(currentUser, currentSchool);
-                //status(currentSchool, currentUser);
+                status(currentSchool, currentUser);
             }
         });
         SAT_SCORE(DATA_FROM_SEARCH_FRAGMENT);
         getImage(DATA_FROM_SEARCH_FRAGMENT);
     }
 
-//    public void status(School school, ParseUser user){
-//        ParseQuery<School> query = ParseQuery.getQuery("FavStatus");
-//        query.include(school.KEY_INSTITUTION_NAME);
-//        query.findInBackground(new FindCallback<School>() {
-//            @Override
-//            public void done(List<School> object, ParseException e) {
-//                if (e != null ){
-//                    Log.e(TAG, e.getMessage());
-//                } else {
-//                    Log.d(TAG, object.get(0).toString());
-//                }
-//            }
-//        });
+    public boolean schoolExists(String name){
+        ParseQuery<School> query = ParseQuery.getQuery(School.class);
+        query.whereEqualTo(School.KEY_INSTITUTION_NAME, name);
+        try {
+            List<School> result = query.find();
+            if(result == null || result.isEmpty())
+                return false;
+            else {
+                currentSchool = result.get(0);
+                return true;
+            }
+        } catch (ParseException e) {
+            Log.d(TAG, "Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-//    }
+    //this function will help display all the favorites (school, user)
+    public void status(School school, ParseUser user){
+        ParseQuery<School> query = ParseQuery.getQuery("FavStatus");
+        query.include(school.KEY_INSTITUTION_NAME);
+        query.findInBackground(new FindCallback<School>() {
+            @Override
+            public void done(List<School> object, ParseException e) {
+                if (e != null ){
+                    Log.e(TAG, e.getMessage());
+                } else {
+                    Log.d(TAG, school.getINSTITUTION_NAME());
+                    Log.d(TAG, user.getObjectId().toString());
+                    //this is how to get the user name and school liked!!!
+                    Log.d(TAG, favorite.getUser().getUsername());
+                    Log.d(TAG, favorite.getSchool().get("INSTITUTION_NAME").toString());
+                }
+            }
+        });
+        ParseQuery<Favorite> queryName = ParseQuery.getQuery(Favorite.class);
+        queryName.findInBackground(new FindCallback<Favorite>() {
+
+            @Override
+            public void done(List<Favorite> objects, ParseException e) {
+                if( e != null){
+                    Log.e(TAG,  e.getMessage());
+                } else{
+                    if (favorite.getUser().getObjectId() == currentUser.getObjectId() && favorite.getSchool().getObjectId() == currentSchool.getObjectId()){
+                        Log.d(TAG, favorite.getUser().getObjectId().toString() + school.getINSTITUTION_NAME());
+                    }
+                }
+            }
+        });
+
+    }
     // TODO This will return an image of the school
     public String getImage(String INSTITUTION_NAME) {
         return "";
@@ -148,7 +202,6 @@ public class SchoolDetailsFragment extends Fragment {
             public void done(ParseException e) {
                 if ( e != null){
                     Log.e(TAG, e.getMessage());
-                    Toast.makeText(getContext(), "Error while saving.", Toast.LENGTH_SHORT).show();
                 }
                 Toast.makeText(getContext(), "School was successfully saved!", Toast.LENGTH_SHORT).show();
             }
@@ -163,8 +216,13 @@ public class SchoolDetailsFragment extends Fragment {
                 try {
                     JSONArray results = json.jsonObject.getJSONArray("results");
                     JSONObject JSON_SAT_OBJECT = results.getJSONObject(0);
-                    int FINAL_SCHOOL_SAT = JSON_SAT_OBJECT.getInt("latest.admissions.sat_scores.average.overall");
-                    tvSATscore.setText(Integer.toString(FINAL_SCHOOL_SAT));
+                    if (JSON_SAT_OBJECT.isNull("latest.admissions.sat_scores.average.overall")){
+                        tvSATscore.setText("AVERAGE SAT INFORMATION NOT FOUND");
+                    }
+                    else {
+                        int FINAL_SCHOOL_SAT = JSON_SAT_OBJECT.getInt("latest.admissions.sat_scores.average.overall");
+                        tvSATscore.setText(Integer.toString(FINAL_SCHOOL_SAT));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -174,5 +232,8 @@ public class SchoolDetailsFragment extends Fragment {
                 Log.d(TAG, "OnFailure");
             }
         });
+    }
+    public void ACT_SCORE(String ACT_SCORE){
+       // final String GET_ACT_URL = URL +
     }
 }

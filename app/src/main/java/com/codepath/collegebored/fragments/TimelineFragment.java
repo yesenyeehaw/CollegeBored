@@ -6,7 +6,6 @@ package com.codepath.collegebored.fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,15 +14,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.codepath.collegebored.R;
 import com.codepath.collegebored.SchoolAdapter;
+import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-
-import org.jetbrains.annotations.NotNull;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,8 @@ public class TimelineFragment extends Fragment {
     private RecyclerView rvSchools;
     protected SchoolAdapter adapter;
     protected List<School> allSchools;
+    protected List<Favorite> allFavorites;
+    TextView tvStartUp;
 
     public TimelineFragment() {
     }
@@ -49,35 +51,45 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        tvStartUp = view.findViewById(R.id.tvStartup);
         rvSchools = view.findViewById(R.id.rvSchools);
         allSchools = new ArrayList<>();
-        adapter = new SchoolAdapter(getContext(), allSchools);
+        allFavorites = new ArrayList<>();
+        adapter = new SchoolAdapter(getContext(), allFavorites);
         rvSchools.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvSchools.setLayoutManager(linearLayoutManager);
-        queryPosts();
+        //queryPosts();
+        testQuery();
     }
 
-    private void queryPosts(){
-        ParseQuery<School> query = ParseQuery.getQuery(School.class);
-        query.include(School.KEY_INSTITUTION_NAME);
+    private void testQuery(){
+        ParseQuery<Favorite> query = ParseQuery.getQuery(Favorite.class);
+        query.include("School");
+        query.include("User");
+        query.whereEqualTo("User", ParseUser.getCurrentUser());
+        Log.d(TAG, "Querying for user: " + ParseUser.getCurrentUser().getObjectId());
         query.setLimit(20);
-        query.findInBackground(new FindCallback<School>() {
+        query.findInBackground(new FindCallback<Favorite>() {
             @Override
-            public void done(List<School> schools, ParseException e) {
-                if (e != null){
-                    Log.e(TAG, "Issue loading schools");
-                    return;
+            public void done(List<Favorite> objects, ParseException e) {
+                if(e == null){
+                   Log.d(TAG, "Favorites for this user: " + objects.size());
+                   ArrayList<Favorite> favSchools = new ArrayList<>();
+                   for(Favorite f : objects){
+                       favSchools.add(f);
+                       allSchools.add((School) f.getSchool());
+                   }
+                   allFavorites.addAll(favSchools);
+                   adapter.notifyDataSetChanged();
+                   Log.d(TAG, "FavSchools: " + favSchools.size());
                 }
-
-                for( School school: schools){
-                    Log.i(TAG, "School: " + school.getINSTITUTION_NAME());
-                }
-                allSchools.addAll(schools);
-                adapter.notifyDataSetChanged();
             }
         });
     }
+    //user == currentuser
 
+    // ONACTIVITYRESULT,
+    // if we added a new school, notifyAdapterItemInserted
+    // if we unfavorited a school, notifyAdapterItemRemoved
 }

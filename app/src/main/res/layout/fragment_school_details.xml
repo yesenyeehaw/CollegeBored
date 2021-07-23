@@ -21,24 +21,31 @@
         android:layout_toEndOf="@+id/ivSchoolPhoto"
         android:text=" " />
 
-    <TextView
-        android:id="@+id/tvSATscore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="309dp"
-        android:layout_marginBottom="556dp" />
-
     <ImageButton
         android:id="@+id/btnFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="17dp"
-        android:layout_marginBottom="288dp"
+        android:layout_marginTop="398dp"
+        android:layout_marginEnd="20dp"
         android:backgroundTint="#FFFFFF"
         android:src="@drawable/ufi_heart" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnFavorite"
+        android:layout_below="@+id/ivSchoolPhoto"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="-337dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSATscore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
 
 </RelativeLayout>

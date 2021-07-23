@@ -3,6 +3,7 @@
  */
 package com.codepath.collegebored.models;
 
+import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -14,6 +15,8 @@ public class Favorite extends ParseObject {
 
     public static final String KEY_USER = "User";
     public static final String KEY_SCHOOL = "School";
+
+    //public static toSchool()
 
     public ParseUser getUser(){
         return getParseUser(KEY_USER);

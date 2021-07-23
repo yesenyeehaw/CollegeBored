@@ -13,18 +13,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 
 public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.ViewHolder>{
     Context context;
-    List<School> schools;
+    List<Favorite> favorites;
 
-    public SchoolAdapter(Context context, List<School> schools){
+    public SchoolAdapter(Context context, List<Favorite> favorites){
         this.context = context;
-        this.schools = schools;
+        this.favorites = favorites;
     }
 
     @NonNull
@@ -36,13 +39,13 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull SchoolAdapter.ViewHolder holder, int position) {
-        School school = schools.get(position);
-        holder.bind(school);
+        Favorite favorite = favorites.get(position);
+        holder.bind(favorite);
     }
 
     @Override
     public int getItemCount() {
-        return schools.size();
+        return favorites.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -54,18 +57,18 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.ViewHolder
         }
 
 
-        public void bind(School school) {
-           tvSchoolName.setText(school.getINSTITUTION_NAME());
+        public void bind(@NotNull Favorite favorite) {
+           tvSchoolName.setText(favorite.getSchool().get("INSTITUTION_NAME").toString());
         }
     }
 
     public void clear() {
-        schools.clear();
+        favorites.clear();
         notifyDataSetChanged();
     }
 
-    public void addAll(List<School> list){
-        schools.addAll(list);
+    public void addAll(List<Favorite> list){
+        favorites.addAll(list);
         notifyDataSetChanged();
     }
 }

@@ -75,6 +75,8 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 Fragment fragment = new SchoolDetailsFragment();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getFragmentManager();
+                // Launch the fragment similar to startActivityforResult
+
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
             }
         });

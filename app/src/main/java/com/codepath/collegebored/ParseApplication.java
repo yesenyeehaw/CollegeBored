@@ -29,10 +29,10 @@ public class ParseApplication extends Application {
     }
 
     public static void changeFavStatus(School school, boolean status){
-        ParseQuery<School> query = ParseQuery.getQuery("School");
+        ParseQuery<School> query = ParseQuery.getQuery(School.class);
 
         query.getInBackground(school.getObjectId(), (object, e) -> {
-            if ( e!= null){
+            if (e != null){
                 Log.e(TAG, "Error: " + e.getMessage());
             }
          else {
