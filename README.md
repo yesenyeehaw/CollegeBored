@@ -41,7 +41,8 @@ Required Stories
 
 
 Optional Stories 
-- [ ] User can get matched with other universities based on stats on a "compare" activity 
+- [ ] User can get matched with other universities based on stats on a "compare" activity
+- [ ] User will be able to edit and update their information 
 - [ ] Q&A board where people can ask questions and other users can reply to give input 
 - [ ] User private or public feature 
 - [ ] back to top button 
