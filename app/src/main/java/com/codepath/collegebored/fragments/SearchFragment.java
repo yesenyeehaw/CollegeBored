@@ -39,9 +39,8 @@ import okhttp3.Headers;
 
 
 public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener{
-    public static final String URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?";
     public static final String TAG = "SearchFragment";
-    public static final String API_KEY = "&api_key=" + BuildConfig.API_KEY;
+    //public static final String API_KEY = "&api_key=" + BuildConfig.API_KEY;
     AsyncHttpClient client = new AsyncHttpClient();
     ArrayList<String> schoolsList = new ArrayList<>();
     ListView lvSchools;
@@ -111,8 +110,8 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     //Search for schools and returns the list (MAX 50 SCHOOLS)
     public ArrayList<String> searchAction (String query){
-        final String searchSchool_URL = URL + "school.name="+ query + "&fields=school.name&per_page=25";
-        client.get(searchSchool_URL + API_KEY, new JsonHttpResponseHandler() {
+        final String searchSchool_URL = School.BASE_URL + "school.name="+ query + "&fields=school.name&per_page=25"+ School.API_KEY;
+        client.get(searchSchool_URL , new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 try{

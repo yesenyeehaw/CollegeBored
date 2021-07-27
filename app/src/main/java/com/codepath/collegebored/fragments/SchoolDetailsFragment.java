@@ -58,9 +58,6 @@ public class SchoolDetailsFragment extends Fragment {
     ImageButton btnFavorite;
     Favorite favorite;
 
-    //TODO: find a way to make these variables easilly accessible (from the same place)
-    public static final String URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?";
-    public static final String API_KEY = "&api_key=" + BuildConfig.API_KEY;
     public static final String TAG = "SchoolDetailsFragment";
 
     public SchoolDetailsFragment() {
@@ -83,6 +80,9 @@ public class SchoolDetailsFragment extends Fragment {
         tvSchoolNameDetails.setText(DATA_FROM_SEARCH_FRAGMENT);
         tvSATscore = view.findViewById(R.id.tvSATscore);
         btnFavorite = view.findViewById(R.id.btnFavorite);
+        if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)) {
+            changebtnFav(true);
+        }
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +94,6 @@ public class SchoolDetailsFragment extends Fragment {
                 else{
                     //
                     currentSchool.setFavStatus(true);
-                    changebtnFav(true);
                     ParseApplication.changeFavStatus(currentSchool, true);
                 }
                 // if the school already exists then get the school by finding it by name and then
@@ -102,17 +101,14 @@ public class SchoolDetailsFragment extends Fragment {
 
                 if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)){
                     Log.d(TAG, "School already exists!");
-                    //favoriteSchool(currentUser, currentSchool);
+                    changebtnFav(true);
                 }else {
                     Log.d(TAG, "School doesnt exist");
 
                     // CREATE FAVORITE AND PASS THE newSCHOOL YOU CREATE TO THE FAVORITE SCHOOL METHOD
                     currentSchool.setINSTITUTION_NAME(DATA_FROM_SEARCH_FRAGMENT);
-
                     favoriteSchool(currentUser, newSchool(currentSchool));
                 }
-                // favoriteSchool(currentUser, currentSchool);
-                //status(currentSchool, currentUser);
             }
         });
         SAT_SCORE(DATA_FROM_SEARCH_FRAGMENT);
@@ -185,7 +181,7 @@ public class SchoolDetailsFragment extends Fragment {
     }
 
     public void SAT_SCORE(String INSTITUTION_NAME) {
-        final String GET_SAT_URL = URL + "school.name=" + INSTITUTION_NAME + "&fields=latest.admissions.sat_scores.average.overall&per_page=1" + API_KEY;
+        final String GET_SAT_URL = School.BASE_URL + "school.name=" + INSTITUTION_NAME + "&fields=latest.admissions.sat_scores.average.overall&per_page=1" + School.API_KEY;
         client.get(GET_SAT_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {

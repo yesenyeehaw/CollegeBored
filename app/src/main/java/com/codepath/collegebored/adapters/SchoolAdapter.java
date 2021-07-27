@@ -2,7 +2,7 @@
 *  timeline
  */
 
-package com.codepath.collegebored;
+package com.codepath.collegebored.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.collegebored.R;
 import com.codepath.collegebored.models.Favorite;
-import com.codepath.collegebored.models.School;
 
 import org.jetbrains.annotations.NotNull;
 

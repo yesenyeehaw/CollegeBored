@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.codepath.collegebored.R;
-import com.codepath.collegebored.SchoolAdapter;
+import com.codepath.collegebored.adapters.SchoolAdapter;
 import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
 import com.parse.FindCallback;
@@ -50,6 +50,7 @@ public class TimelineFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         tvStartUp = view.findViewById(R.id.tvStartup);
         rvSchools = view.findViewById(R.id.rvSchools);
@@ -57,16 +58,13 @@ public class TimelineFragment extends Fragment {
         allFavorites = new ArrayList<>();
         adapter = new SchoolAdapter(getContext(), allFavorites);
         rvSchools.setAdapter(adapter);
-        if (allFavorites.size() > 0){
-            tvStartUp.setHint("");
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvSchools.setLayoutManager(linearLayoutManager);
-        //queryPosts();
-        testQuery();
+        queryFavorites();
     }
 
-    private void testQuery(){
+    private void queryFavorites(){
+
         ParseQuery<Favorite> query = ParseQuery.getQuery(Favorite.class);
         query.include("School");
         query.include("User");
@@ -85,6 +83,10 @@ public class TimelineFragment extends Fragment {
                    }
                    allFavorites.addAll(favSchools);
                    adapter.notifyDataSetChanged();
+                   //TODO: Theres a small lag when trying to get rid of the hint
+                    if (allFavorites.size() > 0){
+                        tvStartUp.setHint("");
+                    }
                     Log.d(TAG, "FavSchools: " + favSchools.size());
                 }
             }

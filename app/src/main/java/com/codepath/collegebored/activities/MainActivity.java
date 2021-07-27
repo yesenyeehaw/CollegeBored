@@ -7,7 +7,10 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.codepath.collegebored.fragments.MatchFragment;
 import com.codepath.collegebored.fragments.ProfileFragment;
 import com.codepath.collegebored.R;
 import com.codepath.collegebored.fragments.SearchFragment;
@@ -15,18 +18,16 @@ import com.codepath.collegebored.fragments.TimelineFragment;
 import com.codepath.collegebored.models.School;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     public static final String TAG = "MainActivity";
-    School school;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
-        school = new School();
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_search:
                         fragment = new SearchFragment();
+                        break;
+                    case R.id.action_match:
+                        fragment = new MatchFragment();
                         break;
                     case R.id.action_profile:
                     default:

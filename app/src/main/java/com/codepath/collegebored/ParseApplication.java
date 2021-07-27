@@ -14,6 +14,9 @@ import com.parse.ParseQuery;
 
 public class ParseApplication extends Application {
     public static final String TAG = "ParseApplication";
+    public static final String CLIENT_KEY = BuildConfig.CLIENT_KEY;
+    public static final String APP_ID = BuildConfig.APP_ID;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -21,8 +24,8 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Favorite.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("AYkgveoMTsykzttb2OgJRRV4zM7Y5GK5gwVuaUbn")
-                .clientKey("7UrI5cMOVL4m7SbsnHZwVrUCq20mohju4jd50Rbp")
+                .applicationId(APP_ID)
+                .clientKey(CLIENT_KEY)
                 .server("https://parseapi.back4app.com")
                 .build()
         );

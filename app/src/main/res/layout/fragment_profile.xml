@@ -11,6 +11,7 @@
         android:id="@+id/ivProfilePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:srcCompat="@drawable/defaultprof"
         tools:src="@drawable/defaultprof" />
 
     <TextView
@@ -21,7 +22,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginBottom="11dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
-        android:text="TextView"
+        android:text="Username"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -35,19 +36,31 @@
             android:id="@+id/tvHighSchool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Highschool" />
 
         <TextView
             android:id="@+id/tvGPA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="GPA" />
 
         <TextView
             android:id="@+id/tvSAT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="SAT" />
+
+        <TextView
+            android:id="@+id/tvACT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ACT" />
+
+        <TextView
+            android:id="@+id/tvExtracurriculars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Extracurricular" />
 
         <Button
             android:id="@+id/btnLogOut"

@@ -49,6 +49,41 @@
             android:hint="High School "
             android:inputType="textPersonName" />
 
+        <EditText
+            android:id="@+id/etGPA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789."
+            android:ems="10"
+            android:hint="GPA"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etSAT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:ems="10"
+            android:hint="SAT Score"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etACT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:ems="10"
+            android:hint="ACT Score"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etExtracurriculars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Extracurriculars"
+            android:inputType="textPersonName" />
+
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
