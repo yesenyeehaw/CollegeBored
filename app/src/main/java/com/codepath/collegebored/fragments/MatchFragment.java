@@ -68,5 +68,4 @@ public class MatchFragment extends Fragment implements AdapterView.OnItemSelecte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
 
-
 }

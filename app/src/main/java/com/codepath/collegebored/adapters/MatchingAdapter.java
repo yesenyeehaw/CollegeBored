@@ -15,6 +15,7 @@ import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class MatchingAdapter extends RecyclerView.Adapter<MatchingAdapter.ViewHo
     @NonNull
     @Override
     public MatchingAdapter.ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(com.codepath.collegebored.R.layout.item_school, parent, false);
+        View view = LayoutInflater.from(context).inflate(com.codepath.collegebored.R.layout.item_matched, parent, false);
         return new ViewHolder(view);
     }
 
@@ -46,16 +47,22 @@ public class MatchingAdapter extends RecyclerView.Adapter<MatchingAdapter.ViewHo
     public int getItemCount() { return schools.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tvSchoolName;
+        TextView tvMatchedSchool;
+        TextView tvSATScore;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSchoolName = itemView.findViewById(com.codepath.collegebored.R.id.tvSchoolName);
+            tvMatchedSchool = itemView.findViewById(com.codepath.collegebored.R.id.tvMatchedSchool);
+            tvSATScore = itemView.findViewById(com.codepath.collegebored.R.id.tvSATScore);
         }
 
-        public void bind(@NotNull School school){
-            tvSchoolName.setText(school.getINSTITUTION_NAME());
-
+        public void bind(@NotNull School school) {
+            tvMatchedSchool.setText(school.getINSTITUTION_NAME());
+            if (school.getSATScore() == 0) {
+                tvSATScore.setText("NO SAT SCORE AVAILABLE");
+            } else {
+                tvSATScore.setText(String.valueOf(school.getSATScore()));
+            }
         }
     }
 }
