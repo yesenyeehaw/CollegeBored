@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -44,6 +46,7 @@ public class ResultMatchFragment extends Fragment {
     private RecyclerView rvMatchedSchools;
     protected MatchingAdapter adapter;
     protected List<School> matchedSchools;
+    //init_schools will hold all the schools in the state selected by user
     protected List<School> init_schools;
     HashMap<String, Integer> hashSAT;
     AsyncHttpClient client = new AsyncHttpClient();
@@ -129,16 +132,33 @@ public class ResultMatchFragment extends Fragment {
                 return o1.getValue().compareTo(o2.getValue());
             }
         });
-        for (int i = 0; i < list.size(); i++){
-            School matched = new School();
-            Log.d(TAG, String.valueOf(list.get(i).getValue()));
-            if(min < list.get(i).getValue() & max > list.get(i).getValue()){
-                Log.d(TAG, list.get(i).getKey());
-                matched.setINSTITUTION_NAME(list.get(i).getKey());
-                matched.setSAT_Score(list.get(i).getValue());
-                matchedSchools.add(matched);
-                adapter.notifyDataSetChanged();
+
+        //Binary search implementation
+        Range<Integer> myRange = new Range<Integer>(min, max);
+        int first = 0;
+        int last = list.size()-1;
+        for (int i = 0; i < list.size(); i ++) {
+            int mid = ( last - first ) / 2;
+            //if schools SAT is lower than within range of reccomended SAT score
+            if (list.get(mid).getValue() < min){
+                first = mid + 1;
             }
+            //SAT Score within range
+            else if(myRange.contains(list.get(mid).getValue())){
+                School matched = new School();
+                matched.setINSTITUTION_NAME(list.get(mid).getKey());
+                matched.setSAT_Score(list.get(mid).getValue());
+                matchedSchools.add(matched);
+                list.remove(mid);
+            }
+            // otherwise avg SAT Score is too high for student (outside of reccomended)
+            else{
+                last = mid - 1;
+            }
+            adapter.notifyDataSetChanged();
         }
+        if(matchedSchools.size() == 0){
+                Toast.makeText(getContext(), "We are unable to match you with schools in this state!", Toast.LENGTH_SHORT).show();
+            }
     }
 }

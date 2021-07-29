@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,15 +55,12 @@ public class MatchingAdapter extends RecyclerView.Adapter<MatchingAdapter.ViewHo
             super(itemView);
             tvMatchedSchool = itemView.findViewById(com.codepath.collegebored.R.id.tvMatchedSchool);
             tvSATScore = itemView.findViewById(com.codepath.collegebored.R.id.tvSATScore);
+
         }
 
         public void bind(@NotNull School school) {
             tvMatchedSchool.setText(school.getINSTITUTION_NAME());
-            if (school.getSATScore() == 0) {
-                tvSATScore.setText("NO SAT SCORE AVAILABLE");
-            } else {
-                tvSATScore.setText(String.valueOf(school.getSATScore()));
-            }
+            tvSATScore.setText(String.valueOf(school.getSATScore()));
         }
     }
 }

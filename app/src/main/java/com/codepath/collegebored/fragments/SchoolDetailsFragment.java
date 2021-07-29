@@ -80,9 +80,6 @@ public class SchoolDetailsFragment extends Fragment {
         tvSchoolNameDetails.setText(DATA_FROM_SEARCH_FRAGMENT);
         tvSATscore = view.findViewById(R.id.tvSATscore);
         btnFavorite = view.findViewById(R.id.btnFavorite);
-        if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)) {
-            changebtnFav(true);
-        }
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +89,7 @@ public class SchoolDetailsFragment extends Fragment {
                     ParseApplication.changeFavStatus(currentSchool, false);
                 }
                 else{
-                    //
+                    changebtnFav(true);
                     currentSchool.setFavStatus(true);
                     ParseApplication.changeFavStatus(currentSchool, true);
                 }
@@ -101,7 +98,7 @@ public class SchoolDetailsFragment extends Fragment {
 
                 if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)){
                     Log.d(TAG, "School already exists!");
-                    changebtnFav(true);
+                    //changebtnFav(true);
                 }else {
                     Log.d(TAG, "School doesnt exist");
 
