@@ -43,16 +43,15 @@ import okhttp3.Headers;
 
 public class ResultMatchFragment extends Fragment {
     public static final String TAG = "ResultMatchFragment";
-    private RecyclerView rvMatchedSchools;
-    protected MatchingAdapter adapter;
-    protected List<School> matchedSchools;
+    RecyclerView rvMatchedSchools;
+    MatchingAdapter adapter;
+    List<School> matchedSchools;
     //init_schools will hold all the schools in the state selected by user
-    protected List<School> init_schools;
+    List<School> init_schools;
     HashMap<String, Integer> hashSAT;
     AsyncHttpClient client = new AsyncHttpClient();
     String state;
     ParseUser user;
-
 
     public ResultMatchFragment() {
         // Required empty public constructor
@@ -73,13 +72,14 @@ public class ResultMatchFragment extends Fragment {
         init_schools = new ArrayList<>();
         matchedSchools = new ArrayList<>();
         hashSAT = new HashMap<>();
-        adapter = new MatchingAdapter(getContext(), matchedSchools);
-        rvMatchedSchools.setAdapter(adapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvMatchedSchools.setLayoutManager(linearLayoutManager);
         Bundle bundle = this.getArguments();
         state = bundle.getString("key");
         getStateSchool(state);
+        adapter = new MatchingAdapter(getContext(), matchedSchools);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvMatchedSchools.setLayoutManager(linearLayoutManager);
+        rvMatchedSchools.setAdapter(adapter);
+
     }
 
     public void getStateSchool(String state){
@@ -98,8 +98,15 @@ public class ResultMatchFragment extends Fragment {
                         mSchool.setSAT_Score(Integer.valueOf(sat));
                         init_schools.add(mSchool);
                     }
-                    updateHash(init_schools, hashSAT);
-                    compare(ParseUser.getCurrentUser(), hashSAT);
+                   updateHash(init_schools, hashSAT);
+                   adapter.addAll(compare(ParseUser.getCurrentUser(), hashSAT));
+                   Log.d(TAG, "=========" + (compare(ParseUser.getCurrentUser(), hashSAT).size()));
+                   Log.d(TAG, (compare(ParseUser.getCurrentUser(), hashSAT).toString()));
+                   adapter.notifyDataSetChanged();
+                    if(matchedSchools.size() == 0){
+                        Toast.makeText(getContext(), "We are unable to match you with schools in this state!", Toast.LENGTH_SHORT).show();
+                    }
+
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
@@ -118,23 +125,51 @@ public class ResultMatchFragment extends Fragment {
     }
 
     //This method will get all of the SAT scores and compare it to the user's score
-    public void compare(ParseUser user, HashMap<String, Integer> hash){
-        int min = user.getInt("SAT")-200;
-        int max = user.getInt("SAT")+100;
-        Log.d(TAG, String.valueOf(max) + " " + String.valueOf(min) );
+    public ArrayList<School> compare(ParseUser user, HashMap<String, Integer> hash){
+        ArrayList<School> start = new ArrayList<>();
+        int minSAT = user.getInt("SAT")-200;
+        int maxSAT = user.getInt("SAT")+100;
+        Log.d(TAG, String.valueOf(minSAT) + " " + String.valueOf(maxSAT) );
 
         //first we sort the hashmap from lowest SAT score to highest
         Set<Map.Entry<String, Integer>> entrySet = hash.entrySet();
         List<Map.Entry<String, Integer>> list = new ArrayList<>(entrySet);
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
+        sort(list);
+        Log.d(TAG, list.toString());
 
+        Range<Integer> myRange = new Range<Integer>(minSAT, maxSAT);
+        int first = 0;
+        int last = list.size()-1;
+        while (first <= last ) {
+            int mid = ( first + last ) / 2;
+            //if schools SAT is lower than within range of reccomended SAT score
+            if (list.get(mid).getValue() < minSAT){
+                first = mid + 1;
+                //Log.d(TAG, Boolean.toString(list.get(mid).getValue() < minSAT));
+            }
+            //SAT Score within range
+            else if(list.get(mid).getValue() > maxSAT){
+                //Log.d(TAG, Boolean.toString(list.get(mid).getValue() > maxSAT));
+                last = mid - 1;
+            }
+            // otherwise avg SAT Score is too high for student (outside of reccomended)
+            else if (myRange.contains(list.get(mid).getValue())){
+               // Log.d(TAG, list.get(mid).getKey()+ " " + list.get(mid).getValue());
+//                Log.d(TAG, Boolean.toString((list.get(mid).getValue()) > maxSAT));
+                School matched = new School();
+                matched.setINSTITUTION_NAME(list.get(mid).getKey());
+                matched.setSAT_Score(list.get(mid).getValue());
+                start.add(matched);
+                list.remove(mid);
+            }
+            if(list.size() == mid){
+                break;
+            }
+        }
+        return start;
+    }
+    public void binarySearch(Range<Integer> range, List<Map.Entry<String, Integer>> list, int min, int max){
         //Binary search implementation
-        Range<Integer> myRange = new Range<Integer>(min, max);
         int first = 0;
         int last = list.size()-1;
         for (int i = 0; i < list.size(); i ++) {
@@ -144,21 +179,27 @@ public class ResultMatchFragment extends Fragment {
                 first = mid + 1;
             }
             //SAT Score within range
-            else if(myRange.contains(list.get(mid).getValue())){
+            else if(range.contains(list.get(mid).getValue())){
                 School matched = new School();
                 matched.setINSTITUTION_NAME(list.get(mid).getKey());
                 matched.setSAT_Score(list.get(mid).getValue());
                 matchedSchools.add(matched);
-                list.remove(mid);
+                //list.remove(mid);
             }
             // otherwise avg SAT Score is too high for student (outside of reccomended)
-            else{
+            else if (list.get(mid).getValue() > max){
                 last = mid - 1;
             }
             adapter.notifyDataSetChanged();
         }
-        if(matchedSchools.size() == 0){
-                Toast.makeText(getContext(), "We are unable to match you with schools in this state!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void sort(List<Map.Entry<String, Integer>> list){
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o1.getValue().compareTo(o2.getValue());
             }
+        });
     }
 }

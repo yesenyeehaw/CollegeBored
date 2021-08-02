@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.collegebored.R;
@@ -55,7 +56,13 @@ public class MatchFragment extends Fragment implements AdapterView.OnItemSelecte
                 Fragment fragment = new ResultMatchFragment();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+                // Configure the "in" and "out" animation files
+                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                // Perform the fragment replacement
+                ft.replace(R.id.flContainer, fragment, "fragment");
+            // Start the animated transition.
+                ft.commit();
             }
         });
     }

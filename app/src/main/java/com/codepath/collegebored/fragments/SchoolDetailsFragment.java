@@ -2,10 +2,8 @@ package com.codepath.collegebored.fragments;
 /*
 * When user clicks on list item in Searchfragment it takes them to this fragment to show school details
  */
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,21 +17,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.codepath.collegebored.BuildConfig;
+import com.codepath.collegebored.DoubleTap;
 import com.codepath.collegebored.ParseApplication;
 import com.codepath.collegebored.R;
 import com.codepath.collegebored.models.Favorite;
 import com.codepath.collegebored.models.School;
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -41,10 +37,7 @@ import com.parse.SaveCallback;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -56,8 +49,8 @@ public class SchoolDetailsFragment extends Fragment {
     School currentSchool;
     ParseUser currentUser;
     ImageButton btnFavorite;
+    ImageView ivSchoolPhoto;
     Favorite favorite;
-
     public static final String TAG = "SchoolDetailsFragment";
 
     public SchoolDetailsFragment() {
@@ -77,9 +70,10 @@ public class SchoolDetailsFragment extends Fragment {
         tvSchoolNameDetails = view.findViewById(R.id.tvSchoolNameDetails);
         Bundle bundle = this.getArguments();
         String DATA_FROM_SEARCH_FRAGMENT = bundle.getString("key");
+        ivSchoolPhoto = view.findViewById(R.id.ivSchoolPhoto);
         tvSchoolNameDetails.setText(DATA_FROM_SEARCH_FRAGMENT);
         tvSATscore = view.findViewById(R.id.tvSATscore);
-        btnFavorite = view.findViewById(R.id.btnFavorite);
+        btnFavorite = view.findViewById(R.id.btnFavoriteMatch);
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +90,7 @@ public class SchoolDetailsFragment extends Fragment {
                 // if the school already exists then get the school by finding it by name and then
                 // set the currentschool to what we get back
 
-                if(schoolExists(DATA_FROM_SEARCH_FRAGMENT)){
+                if(schoolExists(DATA_FROM_SEARCH_FRAGMENT) && favorite.getUser() == currentUser){
                     Log.d(TAG, "School already exists!");
                     //changebtnFav(true);
                 }else {
@@ -108,6 +102,21 @@ public class SchoolDetailsFragment extends Fragment {
                 }
             }
         });
+
+        //Double Tap Gesture (Like)
+        view.setOnClickListener(new DoubleTap() {
+            @Override
+            public void onSingleClick(View v) {}
+            @Override
+            public void onDoubleClick(View v) {
+                if (currentSchool.getFavStatus() == false){
+                    changebtnFav(true);
+                    currentSchool.setFavStatus(true);
+                    ParseApplication.changeFavStatus(currentSchool, true);
+                }
+            }
+        });
+        //favoriteSchoolExists(currentSchool, currentUser);
         SAT_SCORE(DATA_FROM_SEARCH_FRAGMENT);
         getImage(DATA_FROM_SEARCH_FRAGMENT);
     }
@@ -130,9 +139,47 @@ public class SchoolDetailsFragment extends Fragment {
         return false;
     }
 
-    // TODO This will return an image of the school
-    public String getImage(String INSTITUTION_NAME) {
-        return "";
+//    public boolean favoriteSchoolExists(School school, ParseUser user){
+//        ParseQuery<Favorite> query = ParseQuery.getQuery(Favorite.class);
+//        query.whereEqualTo(Favorite.KEY_SCHOOL, school.getINSTITUTION_NAME() );
+//        try{
+//            List<Favorite> result = query.find();
+//            Log.d(TAG, result.toString());
+//            if((result == null || result.isEmpty())){
+//                return false;
+//            }
+//            return true;
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+
+    public void getImage(String INSTITUTION_NAME) {
+        final String GET_SCHOOL_URL = School.BASE_URL + "school.name=" + INSTITUTION_NAME + "&fields=school.school_url&per_page=1" + School.API_KEY;
+        client.get(GET_SCHOOL_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                try {
+                    JSONArray results = json.jsonObject.getJSONArray("results");
+                    JSONObject JSON_SAT_OBJECT = results.getJSONObject(0);
+                    if (JSON_SAT_OBJECT.isNull("school.school_url")){
+                        ivSchoolPhoto.setImageResource(R.drawable.blank_school);
+                    }
+                    else {
+                        String FINAL_SCHOOL_URL = JSON_SAT_OBJECT.getString("school.school_url");
+                        Glide.with(getContext()).load("https://logo.clearbit.com/" + FINAL_SCHOOL_URL).error(R.drawable.blank_school).override(200,200).into(ivSchoolPhoto);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "OnFailure");
+            }
+        });
     }
 
     public void changebtnFav(boolean status){
@@ -190,7 +237,7 @@ public class SchoolDetailsFragment extends Fragment {
                     }
                     else {
                         int FINAL_SCHOOL_SAT = JSON_SAT_OBJECT.getInt("latest.admissions.sat_scores.average.overall");
-                        tvSATscore.setText(Integer.toString(FINAL_SCHOOL_SAT));
+                        tvSATscore.setText("Average SAT Score: " + FINAL_SCHOOL_SAT);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -202,7 +249,7 @@ public class SchoolDetailsFragment extends Fragment {
             }
         });
     }
-    public void ACT_SCORE(String ACT_SCORE){
-       // final String GET_ACT_URL = URL +
-    }
+//    public void ACT_SCORE(String ACT_SCORE){
+//       // final String GET_ACT_URL = URL +
+//    }
 }

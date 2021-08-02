@@ -2,21 +2,16 @@ package com.codepath.collegebored.models;
 /*
 * This class handles all of a school's attributes from Parse
  */
-import android.util.Log;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.collegebored.BuildConfig;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @ParseClassName("School")
 public class School extends ParseObject {
     public static final String TAG = "School";
     public static final String SAT_Score = "SAT_SCORE";
+    public static final String SCHOOL_URL = "School_url";
     public static final String KEY_INSTITUTION_NAME = "INSTITUTION_NAME";
     public static final String KEY_FAV_STATUS = "FavStatus";
     public static final String BASE_URL = "https://api.data.gov/ed/collegescorecard/v1/schools.json?";
@@ -41,4 +36,9 @@ public class School extends ParseObject {
     public int getSATScore(){ return getInt(SAT_Score); }
 
     public void setSAT_Score(int score){ put(SAT_Score, score); }
+
+    public void setSchoolUrl(String url) { put(SCHOOL_URL, url); }
+
+    public String getSchoolUrl() { return getString(SCHOOL_URL); };
+
 }
