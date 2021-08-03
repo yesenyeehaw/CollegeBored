@@ -75,7 +75,6 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getFragmentManager();
                 // Launch the fragment similar to startActivityforResult
-
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
             }
         });
@@ -94,10 +93,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public boolean onQueryTextSubmit(String query) {
         tvStartupS.setHint("");
         arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, searchAction(query));
-        arrayAdapter.notifyDataSetChanged();
         lvSchools.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-
         return false;
     }
 

@@ -37,8 +37,7 @@ public class TimelineFragment extends Fragment {
     protected List<Favorite> allFavorites;
     TextView tvStartUp;
 
-    public TimelineFragment() {
-    }
+    public TimelineFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,12 +63,10 @@ public class TimelineFragment extends Fragment {
     }
 
     private void queryFavorites(){
-
         ParseQuery<Favorite> query = ParseQuery.getQuery(Favorite.class);
         query.include("School");
         query.include("User");
         query.whereEqualTo("User", ParseUser.getCurrentUser());
-        Log.d(TAG, "Querying for user: " + ParseUser.getCurrentUser().getObjectId());
         query.setLimit(20);
         query.findInBackground(new FindCallback<Favorite>() {
             @Override
@@ -83,7 +80,6 @@ public class TimelineFragment extends Fragment {
                    }
                    allFavorites.addAll(favSchools);
                    adapter.notifyDataSetChanged();
-                   //TODO: Theres a small lag when trying to get rid of the hint
                     if (allFavorites.size() > 0){
                         tvStartUp.setHint("");
                     }
@@ -92,9 +88,4 @@ public class TimelineFragment extends Fragment {
             }
         });
     }
-    //user == currentuser
-
-    // ONACTIVITYRESULT,
-    // if we added a new school, notifyAdapterItemInserted
-    // if we unfavorited a school, notifyAdapterItemRemoved
 }

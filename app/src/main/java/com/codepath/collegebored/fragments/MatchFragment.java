@@ -61,7 +61,7 @@ public class MatchFragment extends Fragment implements AdapterView.OnItemSelecte
                 ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                 // Perform the fragment replacement
                 ft.replace(R.id.flContainer, fragment, "fragment");
-            // Start the animated transition.
+                // Start the animated transition.
                 ft.commit();
             }
         });
@@ -74,5 +74,4 @@ public class MatchFragment extends Fragment implements AdapterView.OnItemSelecte
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
-
 }

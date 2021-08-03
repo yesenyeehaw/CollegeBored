@@ -15,6 +15,7 @@ public class Favorite extends ParseObject {
 
     public static final String KEY_USER = "User";
     public static final String KEY_SCHOOL = "School";
+    public static final String KEY_SCHOOL_NAME = "SchoolName";
 
     //public static toSchool()
 
@@ -33,4 +34,10 @@ public class Favorite extends ParseObject {
     public void setSchool(ParseObject school){
         put(KEY_SCHOOL, school);
     }
+
+    public String getSchoolName() { return getString(KEY_SCHOOL_NAME); }
+
+    public void setSchoolName(String name) { put(KEY_SCHOOL_NAME, name); }
+
+
 }

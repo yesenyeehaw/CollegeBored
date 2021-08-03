@@ -1,20 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvSchoolName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/ivFavSchool"
-        android:text="School"
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        <ImageButton
+            android:id="@+id/btnFavoriteMatch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivFavSchool"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="#FFFFFF"
+            android:src="@drawable/ufi_heart" />
+
+        <TextView
+            android:id="@+id/tvSchoolName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/ivFavSchool"
+            android:fontFamily="@font/alegreya_sc_bold"
+            android:text="School"
+            android:textSize="16sp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
 
     <ImageView
         android:id="@+id/ivFavSchool"
@@ -22,4 +43,17 @@
         android:layout_height="wrap_content"
         tools:srcCompat="@drawable/blank_school" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tvSchoolWebsite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSchoolName"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/ivFavSchool"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="www.url.com" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
