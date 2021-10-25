@@ -32,16 +32,16 @@ App Design - Product Spec
 
 Required Stories
 
-- [ ] User profile that has their information pertaining highschool, city/county (optional), GPA, ACT/SAT scores, extracurriculars 
-- [ ] Search for schools bar, where users can look for and "like" schools to add to their list of schools they want to or plan to apply to 
-- [ ] User home screen displays schools user has "liked" and user can say if theyve applied to it or not yet
+- [x] User profile that has their information pertaining highschool, city/county (optional), GPA, ACT/SAT scores, extracurriculars 
+- [x] Search for schools bar, where users can look for and "like" schools to add to their list of schools they want to or plan to apply to 
+- [x] User home screen displays schools user has "liked" and user can say if theyve applied to it or not yet
 - [ ] User will see schools on google map when browsing 
 - [ ] User will see deadlines for applications/financial aid 
-- [ ] User can log in or sign up 
+- [x] User can log in or sign up 
 
 
 Optional Stories 
-- [ ] User can get matched with other universities based on stats on a "compare" activity
+- [x] User can get matched with other universities based on stats on a "compare" activity
 - [ ] User will be able to edit and update their information 
 - [ ] Q&A board where people can ask questions and other users can reply to give input 
 - [ ] User private or public feature 
